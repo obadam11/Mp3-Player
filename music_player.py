@@ -73,9 +73,10 @@ class Music_Player(object):
 
     def txt_on_screen(self, x, y, color):
         all_songs = Music_Player().find_mp3_files()
-        on_screen = all_songs[Music_Player.index]
+        playing_now = all_songs[Music_Player.index]
+        playing_now = playing_now[:-4]
         font = pygame.font.Font(None, 18)
-        text = font.render(str(on_screen), 1, color)
+        text = font.render(str(playing_now), 1, color)
         self.display.blit(text, (x,y))
 
 
