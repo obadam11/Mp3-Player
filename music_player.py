@@ -1,7 +1,9 @@
 import pygame
 import sys
+import glob
 
 pygame.init()
+
 
 screen_height = 400
 screen_width = 600
@@ -18,8 +20,7 @@ pygame.display.set_caption("Music Player")
 
 
 class Music_Player(object):
-    def __init__(self, file_name):
-        self.file_name = file_name
+    def __init__(self):
         self.display = screen
 
     def play(self):
@@ -28,6 +29,31 @@ class Music_Player(object):
 
     def color_screen(self, color):
         self.display.fill(color)
+
+    @classmethod
+    def find_mp3_files(cls):
+        songs = glob.glob("./*.mp3")
+        music_list = [song[2:] for song in songs] # Comprehensive list.
+        print(music_list)
+        return music_list
+
+
+
+    @classmethod
+    def play_music(cls):
+        songs = Music_Player().find_mp3_files()
+        for song in songs:
+            print(song)
+            pygame.mixer.music.load(song)
+            pygame.mixer.music.play()
+            while not pygame.mixer.music.get_busy():
+                continue
+
+    @classmethod
+    def pause_music(cls):
+        if pygame.mixer.music.get_busy():
+            pygame.mixer.music.stop()
+
 
     def button(self, xb, yb, radius, txt, colorb, colort, xt, yt):
         # Drawing the rectangle (button)
@@ -53,11 +79,13 @@ class Music_Player(object):
 
                 if txt == "Play":
                     if (250 <= xm <= 350) and (50 <= ym <= 145):
-                        print("Play Button is clicked")
+                        print("Playing...")
+                        Music_Player.play_music()
 
                 if txt == "Pause":
                     if (398 <= xm <= 500) and (50 <= ym <= 145):
-                        print("Pause button is clicked")
+                        print("Paused...")
+                        Music_Player.pause_music()
 
                 if txt == "Exit":
                     if (250 <= xm <= 350) and (200 <= ym <= 300):
@@ -73,7 +101,8 @@ class Music_Player(object):
 
 
 
-p = Music_Player("skip.txt")
+
+p = Music_Player()
 
 running = True
 while running:
