@@ -65,10 +65,11 @@ class Music_Player(object):
     @classmethod
     def next_music(cls):
         global songs
+        Music_Player.inc_index()
         pygame.mixer.music.load(songs[Music_Player.index])
         pygame.mixer.music.play()
         print(f"Playing {songs[Music_Player.index]}")
-        Music_Player.inc_index()
+
 
     def txt_on_screen(self, x, y, color):
         all_songs = Music_Player().find_mp3_files()
