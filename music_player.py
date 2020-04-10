@@ -46,7 +46,7 @@ class Music_Player(object):
     def find_mp3_files(cls):
         songs = glob.glob("./*.mp3")
         music_list = [song[2:] for song in songs] # Comprehensive list.
-        print(music_list)
+        # print(music_list)
         return music_list
 
     @classmethod
@@ -69,6 +69,13 @@ class Music_Player(object):
         pygame.mixer.music.play()
         print(f"Playing {songs[Music_Player.index]}")
         Music_Player.inc_index()
+
+    def txt_on_screen(self, x, y, color):
+        all_songs = Music_Player().find_mp3_files()
+        on_screen = all_songs[Music_Player.index]
+        font = pygame.font.Font(None, 18)
+        text = font.render(str(on_screen), 1, color)
+        self.display.blit(text, (x,y))
 
 
 
@@ -131,6 +138,8 @@ while running:
 
     p.button(xb=450, yb=250, radius=50, txt="Next",
              colorb=red, colort=white, xt=435, yt=240)
+
+    p.txt_on_screen(20, 150, black)
 
 
 
