@@ -8,13 +8,18 @@ pygame.init()
 screen_height = 400
 screen_width = 600
 
-lightblue = (27, 238, 255)
-black = (0, 0, 0)
 white = (255, 255, 255)
+black = (0, 0, 0)
+dark_blue = (141, 226, 218)
 red = (255, 0, 0)
+maroon = (128, 0, 0)
+pink = (244, 52, 131)
+lightblue = (27, 238, 255)
+grey = (129, 137, 129)
+brown = (160,82,45)
 
 screen = pygame.display.set_mode((screen_width, screen_height))
-pygame.display.set_caption("Music Player")
+pygame.display.set_caption("MP3 Player")
 
 
 
@@ -51,6 +56,13 @@ class Music_Player(object):
         return music_list
 
     @classmethod
+    def get_num_mp3(cls):
+        songs = Music_Player().find_mp3_files()
+        length = len(songs)
+        return length
+
+
+    @classmethod
     def play_music(cls):
         global songs
         songs = Music_Player().find_mp3_files()
@@ -78,14 +90,22 @@ class Music_Player(object):
         print(f"Playing {songs[Music_Player.index]}")
 
 
-    def txt_on_screen(self, x, y, color):
+    def current_song(self, x, y, color):
         all_songs = Music_Player().find_mp3_files()
         playing_now = all_songs[Music_Player.index]
         playing_now = playing_now[:-4]
         on_screen = f"{Music_Player.index + 1} : {playing_now}"
-        font = pygame.font.Font(None, 30)
+        font = pygame.font.Font(None, 25)
         text = font.render(str(on_screen), 1, color)
         self.display.blit(text, (x,y))
+
+
+    def text(self, x, y, color, on_screen):
+        font = pygame.font.Font(None, 20)
+        text = font.render(str(on_screen), 1, color)
+        self.display.blit(text, (x,y))
+
+
 
 
 
@@ -115,8 +135,6 @@ class Music_Player(object):
                 if event.key == pygame.K_SPACE:
                     print("Paused...")
                     Music_Player.pause_music()
-
-
 
 
         for event in pygame.event.get():
@@ -155,21 +173,29 @@ while running:
             pygame.quit()
             sys.exit()
 
-    p.color_screen(lightblue)
+    p.color_screen(white)
 
     p.button(xb=300, yb=100, radius=50, txt="Play",
-            colorb=red, colort=white, xt=290, yt=95)
+            colorb=lightblue, colort=white, xt=290, yt=95)
 
     p.button(xb=450, yb=100, radius=50, txt="Pause",
-             colorb=red, colort=white, xt=430, yt=95)
+             colorb=lightblue, colort=white, xt=430, yt=95)
 
     p.button(xb=300, yb=250, radius=50, txt="Exit",
-             colorb=red, colort=white, xt=290, yt=240)
+             colorb=lightblue, colort=white, xt=290, yt=240)
 
     p.button(xb=450, yb=250, radius=50, txt="Next",
-             colorb=red, colort=white, xt=435, yt=240)
+             colorb=lightblue, colort=white, xt=435, yt=240)
 
-    p.txt_on_screen(20, 150, black)
+
+    p.text(screen_width - 500, screen_height - 50, black,
+            "'P' for PLAY   'SPACE' for PAUSE   'E' for EXIT   'N' for NEXT.")
+
+    p.text(10, 20, black, f'number of mp3 files : {Music_Player.get_num_mp3()}')
+
+
+    p.text(20, 125, pink, "Currently playing:")
+    p.current_song(20, 170, pink)
 
 
 
