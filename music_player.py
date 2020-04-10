@@ -20,6 +20,8 @@ pygame.display.set_caption("Music Player")
 
 
 class Music_Player(object):
+    index = 0
+
     def __init__(self):
         self.display = screen
 
@@ -31,48 +33,55 @@ class Music_Player(object):
         self.display.fill(color)
 
     @classmethod
+    def inc_index(cls):
+        global songs
+        if Music_Player.index == len(songs) - 1:
+            Music_Player.index = 0
+        else:
+            Music_Player.index += 1
+        print(Music_Player.index)
+
+
+    @classmethod
     def find_mp3_files(cls):
         songs = glob.glob("./*.mp3")
         music_list = [song[2:] for song in songs] # Comprehensive list.
         print(music_list)
         return music_list
 
-
-
     @classmethod
     def play_music(cls):
+        global songs
         songs = Music_Player().find_mp3_files()
-        for song in songs:
-            print(song)
-            pygame.mixer.music.load(song)
-            pygame.mixer.music.play()
-            while not pygame.mixer.music.get_busy():
-                continue
+        pygame.mixer.music.load(songs[0])
+        pygame.mixer.music.play()
+        print(f"Playing {songs[0]}")
 
     @classmethod
     def pause_music(cls):
         if pygame.mixer.music.get_busy():
             pygame.mixer.music.stop()
 
+    @classmethod
+    def next_music(cls):
+        global songs
+        pygame.mixer.music.load(songs[Music_Player.index])
+        pygame.mixer.music.play()
+        print(f"Playing {songs[Music_Player.index]}")
+        Music_Player.inc_index()
+
+
 
     def button(self, xb, yb, radius, txt, colorb, colort, xt, yt):
         # Drawing the rectangle (button)
         pygame.draw.circle(self.display, colorb, (xb, yb), radius)
-
         # Writing in the button
-
         on_screen = str(txt)
         font = pygame.font.Font(None, 18)
         text = font.render(str(on_screen), 1, colort)
         self.display.blit(text, (xt,yt))
-
-
         # Making the button functional
         xm, ym = pygame.mouse.get_pos()
-
-        # print(f"x = {xm}")
-        # print(f"y = {ym}")
-
 
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
@@ -93,13 +102,10 @@ class Music_Player(object):
                         pygame.quit()
                         sys.exit()
 
-
-
-
-
-
-
-
+                if txt == "Next":
+                    if (400 <= xm <= 500) and (200 <= ym <= 300):
+                        print("Next button is clicked")
+                        Music_Player.next_music()
 
 
 p = Music_Player()
@@ -122,6 +128,9 @@ while running:
 
     p.button(xb=300, yb=250, radius=50, txt="Exit",
              colorb=red, colort=white, xt=290, yt=240)
+
+    p.button(xb=450, yb=250, radius=50, txt="Next",
+             colorb=red, colort=white, xt=435, yt=240)
 
 
 
