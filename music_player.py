@@ -21,6 +21,7 @@ pygame.display.set_caption("Music Player")
 
 class Music_Player(object):
     index = 0
+    is_playing = True
 
     def __init__(self):
         self.display = screen
@@ -59,12 +60,14 @@ class Music_Player(object):
 
     @classmethod
     def pause_music(cls):
-        is_playing = pygame.mixer.music.get_busy()
-
-        if is_playing:
+        print(Music_Player.is_playing)
+        if Music_Player.is_playing:
             pygame.mixer.music.pause()
-        else:
+            Music_Player.is_playing = False
+        elif not  Music_Player.is_playing:
             pygame.mixer.music.unpause()
+            Music_Player.is_playing = True
+
 
     @classmethod
     def next_music(cls):
@@ -139,6 +142,7 @@ class Music_Player(object):
                     if (400 <= xm <= 500) and (200 <= ym <= 300):
                         print("Next button is clicked")
                         Music_Player.next_music()
+
 
 
 p = Music_Player()
