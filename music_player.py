@@ -59,8 +59,12 @@ class Music_Player(object):
 
     @classmethod
     def pause_music(cls):
-        if pygame.mixer.music.get_busy():
-            pygame.mixer.music.stop()
+        is_playing = pygame.mixer.music.get_busy()
+
+        if is_playing:
+            pygame.mixer.music.pause()
+        else:
+            pygame.mixer.music.unpause()
 
     @classmethod
     def next_music(cls):
@@ -75,8 +79,9 @@ class Music_Player(object):
         all_songs = Music_Player().find_mp3_files()
         playing_now = all_songs[Music_Player.index]
         playing_now = playing_now[:-4]
-        font = pygame.font.Font(None, 18)
-        text = font.render(str(playing_now), 1, color)
+        on_screen = f"{Music_Player.index + 1} : {playing_now}"
+        font = pygame.font.Font(None, 30)
+        text = font.render(str(on_screen), 1, color)
         self.display.blit(text, (x,y))
 
 
@@ -91,6 +96,25 @@ class Music_Player(object):
         self.display.blit(text, (xt,yt))
         # Making the button functional
         xm, ym = pygame.mouse.get_pos()
+
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_p:
+                    print("Playing...")
+                    Music_Player.play_music()
+                if event.key == pygame.K_e:
+                    print("Exit button is clicked")
+                    pygame.quit()
+                    sys.exit()
+                if event.key == pygame.K_n:
+                    print("Next button is clicked")
+                    Music_Player.next_music()
+                if event.key == pygame.K_SPACE:
+                    print("Paused...")
+                    Music_Player.pause_music()
+
+
+
 
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
