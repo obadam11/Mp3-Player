@@ -68,12 +68,11 @@ class Music_Player(object):
         global songs
         songs = Music_Player().find_mp3_files()
         pygame.mixer.music.load(songs[0])
-        pygame.mixer.music.play()
+        pygame.mixer.music.play(-1)
         print(f"Playing {songs[0]}")
 
     @classmethod
     def pause_music(cls):
-        # print(Music_Player.is_playing)
         if Music_Player.is_playing:
             pygame.mixer.music.pause()
             print("Paused...")
@@ -89,7 +88,7 @@ class Music_Player(object):
         global songs
         Music_Player.inc_index()
         pygame.mixer.music.load(songs[Music_Player.index])
-        pygame.mixer.music.play()
+        pygame.mixer.music.play(-1)
         print(f"Playing {songs[Music_Player.index]}")
 
 
@@ -210,7 +209,7 @@ while running:
 
     pause_logo(460, 70, 460, 120)
     next_logo(440, 220)
-    p.text(280, 240,black,  "EXIT")
+    p.text(280, 240, black,  "EXIT")
 
 
 
