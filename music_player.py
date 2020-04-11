@@ -164,6 +164,11 @@ class Music_Player(object):
 
 play_b = pygame.image.load("C:\\Users\\96650\\Documents\\Programming\\Python1\\Mp3 Player\\images\\play_button.png")
 play_b = pygame.transform.scale(play_b, (64, 64))
+
+def pause_logo(x1, y1, x2, y2):
+    pygame.draw.line(screen, black, (x1, y1), (x2, y2))
+    pygame.draw.line(screen, black, (x1 - 25, y1), (x2 - 25, y2))
+
 p = Music_Player()
 
 running = True
@@ -199,6 +204,8 @@ while running:
     p.current_song(20, 170, pink)
 
     screen.blit(play_b, (265, 70))
+    pause_logo(460, 70, 460, 120)
+
 
 
 
