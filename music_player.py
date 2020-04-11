@@ -169,6 +169,10 @@ def pause_logo(x1, y1, x2, y2):
     pygame.draw.line(screen, black, (x1, y1), (x2, y2))
     pygame.draw.line(screen, black, (x1 - 25, y1), (x2 - 25, y2))
 
+def next_logo(x1, y1):
+    pygame.draw.polygon(screen, (0, 0, 0), [(x1, y1), (x1, y1 + 50), (x1 + 25, y1 + 25)])
+
+
 p = Music_Player()
 
 running = True
@@ -204,7 +208,10 @@ while running:
     p.current_song(20, 170, pink)
 
     screen.blit(play_b, (265, 70))
+
     pause_logo(460, 70, 460, 120)
+    next_logo(440, 220)
+    p.text(280, 240,black,  "EXIT")
 
 
 
