@@ -2,11 +2,10 @@ import pygame
 import sys
 import glob
 import os
-import time
 
 pygame.init()
 clock = pygame.time.Clock()
-fps = 20
+fps = 60
 
 screen_height = 400
 screen_width = 600
@@ -29,10 +28,7 @@ print(f"CURRENT DIR: {os.getcwd()}")
 script_dir = os.path.dirname(__file__)
 rel_path = "Music"
 abs_file_path = os.path.join(script_dir, rel_path)
-
-
-def go_into_Music():
-    os.chdir(abs_file_path)
+os.chdir(abs_file_path)
 
 
 class Music_Player(object):
@@ -42,13 +38,9 @@ class Music_Player(object):
     def __init__(self):
         self.display = screen
 
-    def play(self):
-        pygame.mixer.music.load(self.file_name)
-        pygame.mixer.music.play(0)
-
     @classmethod
     def inc_index(cls):
-        global songs
+        songs = Music_Player.find_mp3_files()
         if Music_Player.index == len(songs) - 1:
             Music_Player.index = 0
         else:
@@ -63,14 +55,13 @@ class Music_Player(object):
 
     @classmethod
     def get_num_mp3(cls):
-        songs = Music_Player().find_mp3_files()
+        songs = Music_Player.find_mp3_files()
         length = len(songs)
         return length
 
     @classmethod
     def play_music(cls):
-        global songs
-        songs = Music_Player().find_mp3_files()
+        songs = Music_Player.find_mp3_files()
         pygame.mixer.music.load(songs[0])
         pygame.mixer.music.play(-1)
         print(f"Playing {songs[0]}")
@@ -86,18 +77,18 @@ class Music_Player(object):
             print("Unpaused...")
             pygame.mixer.music.unpause()
             Music_Player.is_playing = True
+        print(Music_Player.is_playing)
 
     @classmethod
     def next_music(cls):
-        global songs
+        songs = Music_Player.find_mp3_files()
         Music_Player.inc_index()
         pygame.mixer.music.load(songs[Music_Player.index])
         pygame.mixer.music.play(-1)
         print(f"Playing {songs[Music_Player.index]}")
 
     def current_song(self, x, y, color):
-        go_into_Music()
-        all_songs = Music_Player().find_mp3_files()
+        all_songs = Music_Player.find_mp3_files()
         playing_now = all_songs[Music_Player.index]
         playing_now = playing_now[:-4]
         on_screen = f"{Music_Player.index + 1} : {playing_now}"
@@ -119,28 +110,25 @@ class Music_Player(object):
         text = font.render(str(on_screen), 1, red)
         self.display.blit(text, (100,  200))
 
-    def draw_button(self, xb, yb, radius, txt, colorb):
+    def draw_button(self, x, y, radius, color):
+        pygame.draw.circle(self.display, color, (x, y), radius)
 
-        pygame.draw.circle(self.display, colorb, (xb, yb), radius)
-
-    def listing(self, txt):
-        go_into_Music()
+    def listening(self, txt):
         # Making the button functional
-        xm, ym = pygame.mouse.get_pos()
-
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_p:
+            if (event.key == pygame.K_p) and (txt == "Play"):
                 Music_Player.play_music()
-            if event.key == pygame.K_e:
+            if (event.key == pygame.K_e) and (txt == "Exit"):
                 print("Exit button is clicked")
                 pygame.quit()
                 sys.exit()
-            if event.key == pygame.K_n:
+            if (event.key == pygame.K_n) and (txt == "Next"):
                 print("Next button is clicked")
                 Music_Player.next_music()
-            if event.key == pygame.K_SPACE:
+            if (event.key == pygame.K_SPACE) and (txt == "Pause"):
                 Music_Player.pause_music()
 
+        xm, ym = pygame.mouse.get_pos()
         if event.type == pygame.MOUSEBUTTONDOWN:
 
             if txt == "Play":
@@ -188,20 +176,20 @@ while running:
             running = False
             pygame.quit()
             sys.exit()
-        p.listing("Play")
-        p.listing("Next")
-        p.listing("Exit")
-        p.listing("Pause")
+        p.listening("Play")
+        p.listening("Next")
+        p.listening("Exit")
+        p.listening("Pause")
 
     screen.fill(white)
-    p.draw_button(xb=300, yb=100, radius=50, txt="Play",
-                  colorb=lightblue)
-    p.draw_button(xb=450, yb=100, radius=50, txt="Pause",
-                  colorb=lightblue)
-    p.draw_button(xb=300, yb=250, radius=50, txt="Exit",
-                  colorb=lightblue)
-    p.draw_button(xb=450, yb=250, radius=50, txt="Next",
-                  colorb=lightblue)
+    p.draw_button(x=300, y=100, radius=50,
+                  color=lightblue)
+    p.draw_button(x=450, y=100, radius=50,
+                  color=lightblue)
+    p.draw_button(x=300, y=250, radius=50,
+                  color=lightblue)
+    p.draw_button(x=450, y=250, radius=50,
+                  color=lightblue)
 
     p.text(screen_width - 500, screen_height - 50, black,
            "'P' for PLAY   'SPACE' for PAUSE   'E' for EXIT   'N' for NEXT.")
