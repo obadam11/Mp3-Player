@@ -79,12 +79,12 @@ class Music_Player(object):
     @classmethod
     def pause_music(cls):
         if Music_Player.is_playing:
-            pygame.mixer.music.pause()
             print("Paused...")
+            pygame.mixer.music.pause()
             Music_Player.is_playing = False
         elif not Music_Player.is_playing:
-            pygame.mixer.music.unpause()
             print("Unpaused...")
+            pygame.mixer.music.unpause()
             Music_Player.is_playing = True
 
     @classmethod
