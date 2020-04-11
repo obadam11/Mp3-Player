@@ -51,8 +51,7 @@ class Music_Player(object):
     @classmethod
     def find_mp3_files(cls):
         songs = glob.glob("./*.mp3")
-        music_list = [song[2:] for song in songs] # Comprehensive list.
-        # print(music_list)
+        music_list = [song[2:] for song in songs] # Comprehensive list
         return music_list
 
     @classmethod
@@ -72,12 +71,14 @@ class Music_Player(object):
 
     @classmethod
     def pause_music(cls):
-        print(Music_Player.is_playing)
+        # print(Music_Player.is_playing)
         if Music_Player.is_playing:
             pygame.mixer.music.pause()
+            print("Paused...")
             Music_Player.is_playing = False
         elif not  Music_Player.is_playing:
             pygame.mixer.music.unpause()
+            print("Unpaused...")
             Music_Player.is_playing = True
 
 
@@ -113,10 +114,12 @@ class Music_Player(object):
         # Drawing the rectangle (button)
         pygame.draw.circle(self.display, colorb, (xb, yb), radius)
         # Writing in the button
-        on_screen = str(txt)
-        font = pygame.font.Font(None, 18)
-        text = font.render(str(on_screen), 1, colort)
-        self.display.blit(text, (xt,yt))
+
+        # on_screen = str(txt)
+        # font = pygame.font.Font(None, 18)
+        # text = font.render(str(on_screen), 1, colort)
+        # self.display.blit(text, (xt,yt))
+
         # Making the button functional
         xm, ym = pygame.mouse.get_pos()
 
@@ -136,8 +139,6 @@ class Music_Player(object):
                     print("Paused...")
                     Music_Player.pause_music()
 
-
-        for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
 
                 if txt == "Play":
@@ -147,12 +148,11 @@ class Music_Player(object):
 
                 if txt == "Pause":
                     if (398 <= xm <= 500) and (50 <= ym <= 145):
-                        print("Paused...")
                         Music_Player.pause_music()
 
                 if txt == "Exit":
                     if (250 <= xm <= 350) and (200 <= ym <= 300):
-                        print("Exit button is clicked")
+                        print("Exiting...")
                         pygame.quit()
                         sys.exit()
 
@@ -162,7 +162,8 @@ class Music_Player(object):
                         Music_Player.next_music()
 
 
-
+play_b = pygame.image.load("C:\\Users\\96650\\Documents\\Programming\\Python1\\Mp3 Player\\images\\play_button.png")
+play_b = pygame.transform.scale(play_b, (64, 64))
 p = Music_Player()
 
 running = True
@@ -197,6 +198,7 @@ while running:
     p.text(20, 125, pink, "Currently playing:")
     p.current_song(20, 170, pink)
 
+    screen.blit(play_b, (265, 70))
 
 
 
