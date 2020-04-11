@@ -1,8 +1,8 @@
 import pygame
 import sys
-import g
-import time
+import glob
 import os
+import time
 
 pygame.init()
 clock = pygame.time.Clock()
@@ -37,6 +37,7 @@ def go_into_Music():
 class Music_Player(object):
     index = 0
     is_playing = True
+
 
     def __init__(self):
         self.display = screen
@@ -117,6 +118,17 @@ class Music_Player(object):
         self.display.blit(text, (x,y))
 
 
+    def get_music_sec(self):
+        milli  = pygame.mixer.music.get_pos()
+        seconds = milli / 1000
+        seconds = int(seconds)
+        on_screen = seconds
+        font = pygame.font.Font(None, 30)
+        text = font.render(str(on_screen), 1, black)
+        self.display.blit(text, (100,  200))
+
+
+
 
 
 
@@ -144,8 +156,7 @@ class Music_Player(object):
             if event.key == pygame.K_SPACE:
                 print("Paused...")
                 Music_Player.pause_music()
-        if event.type == pygame.KEYUP:
-            time.sleep(0.2)
+
 
         if event.type == pygame.MOUSEBUTTONDOWN:
 
@@ -221,6 +232,7 @@ while running:
     next_logo(440, 220)
     p.text(280, 240, black,  "EXIT")
 
+    p.get_music_sec()
 
 
 
