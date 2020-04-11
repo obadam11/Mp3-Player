@@ -1,9 +1,11 @@
 import pygame
 import sys
 import glob
+import time
 
 pygame.init()
-
+clock = pygame.time.Clock()
+fps = 20
 
 screen_height = 400
 screen_width = 600
@@ -110,56 +112,53 @@ class Music_Player(object):
 
 
 
-    def button(self, xb, yb, radius, txt, colorb, colort, xt, yt):
+    def button(self, xb, yb, radius, txt, colorb):
         # Drawing the rectangle (button)
         pygame.draw.circle(self.display, colorb, (xb, yb), radius)
         # Writing in the button
 
-        # on_screen = str(txt)
-        # font = pygame.font.Font(None, 18)
-        # text = font.render(str(on_screen), 1, colort)
-        # self.display.blit(text, (xt,yt))
-
         # Making the button functional
         xm, ym = pygame.mouse.get_pos()
 
-        for event in pygame.event.get():
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_p:
+
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_p:
+                print("Playing...")
+                Music_Player.play_music()
+            if event.key == pygame.K_e:
+                print("Exit button is clicked")
+                pygame.quit()
+                sys.exit()
+            if event.key == pygame.K_n:
+                print("Next button is clicked")
+                Music_Player.next_music()
+            if event.key == pygame.K_SPACE:
+                print("Paused...")
+                Music_Player.pause_music()
+        if event.type == pygame.KEYUP:
+            time.sleep(0.2)
+
+        if event.type == pygame.MOUSEBUTTONDOWN:
+
+            if txt == "Play":
+                if (250 <= xm <= 350) and (50 <= ym <= 145):
                     print("Playing...")
                     Music_Player.play_music()
-                if event.key == pygame.K_e:
-                    print("Exit button is clicked")
-                    pygame.quit()
-                    sys.exit()
-                if event.key == pygame.K_n:
-                    print("Next button is clicked")
-                    Music_Player.next_music()
-                if event.key == pygame.K_SPACE:
-                    print("Paused...")
+
+            if txt == "Pause":
+                if (398 <= xm <= 500) and (50 <= ym <= 145):
                     Music_Player.pause_music()
 
-            if event.type == pygame.MOUSEBUTTONDOWN:
+            if txt == "Exit":
+                if (250 <= xm <= 350) and (200 <= ym <= 300):
+                    print("Exiting...")
+                    pygame.quit()
+                    sys.exit()
 
-                if txt == "Play":
-                    if (250 <= xm <= 350) and (50 <= ym <= 145):
-                        print("Playing...")
-                        Music_Player.play_music()
-
-                if txt == "Pause":
-                    if (398 <= xm <= 500) and (50 <= ym <= 145):
-                        Music_Player.pause_music()
-
-                if txt == "Exit":
-                    if (250 <= xm <= 350) and (200 <= ym <= 300):
-                        print("Exiting...")
-                        pygame.quit()
-                        sys.exit()
-
-                if txt == "Next":
-                    if (400 <= xm <= 500) and (200 <= ym <= 300):
-                        print("Next button is clicked")
-                        Music_Player.next_music()
+            if txt == "Next":
+                if (400 <= xm <= 500) and (200 <= ym <= 300):
+                    print("Next button is clicked")
+                    Music_Player.next_music()
 
 
 play_b = pygame.image.load("C:\\Users\\96650\\Documents\\Programming\\Python1\\Mp3 Player\\images\\play_button.png")
@@ -183,19 +182,19 @@ while running:
             pygame.quit()
             sys.exit()
 
-    p.color_screen(white)
+        p.color_screen(white)
 
-    p.button(xb=300, yb=100, radius=50, txt="Play",
-            colorb=lightblue, colort=white, xt=290, yt=95)
+        p.button(xb=300, yb=100, radius=50, txt="Play",
+                colorb=lightblue)
 
-    p.button(xb=450, yb=100, radius=50, txt="Pause",
-             colorb=lightblue, colort=white, xt=430, yt=95)
+        p.button(xb=450, yb=100, radius=50, txt="Pause",
+                 colorb=lightblue)
 
-    p.button(xb=300, yb=250, radius=50, txt="Exit",
-             colorb=lightblue, colort=white, xt=290, yt=240)
+        p.button(xb=300, yb=250, radius=50, txt="Exit",
+                 colorb=lightblue)
 
-    p.button(xb=450, yb=250, radius=50, txt="Next",
-             colorb=lightblue, colort=white, xt=435, yt=240)
+        p.button(xb=450, yb=250, radius=50, txt="Next",
+                 colorb=lightblue)
 
 
     p.text(screen_width - 500, screen_height - 50, black,
@@ -216,5 +215,7 @@ while running:
 
 
 
-
+    clock.tick(fps)
     pygame.display.update()
+
+pygame.quit()
