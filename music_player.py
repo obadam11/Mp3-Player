@@ -2,10 +2,11 @@ import pygame
 import sys
 import glob
 import os
+import time
 
 pygame.init()
 clock = pygame.time.Clock()
-fps = 60
+fps = 20
 
 screen_height = 400
 screen_width = 600
@@ -44,7 +45,6 @@ class Music_Player(object):
     def play(self):
         pygame.mixer.music.load(self.file_name)
         pygame.mixer.music.play(0)
-
 
     @classmethod
     def inc_index(cls):
@@ -130,7 +130,6 @@ class Music_Player(object):
 
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_p:
-                print("Playing...")
                 Music_Player.play_music()
             if event.key == pygame.K_e:
                 print("Exit button is clicked")
@@ -140,7 +139,6 @@ class Music_Player(object):
                 print("Next button is clicked")
                 Music_Player.next_music()
             if event.key == pygame.K_SPACE:
-                print("Paused...")
                 Music_Player.pause_music()
 
         if event.type == pygame.MOUSEBUTTONDOWN:
@@ -166,8 +164,8 @@ class Music_Player(object):
                     Music_Player.next_music()
 
 
-play_b = pygame.image.load(
-    "C:\\Users\\96650\\Documents\\Programming\\Python1\\Mp3 Player\\images\\play_button.png")
+directorty = """C:\\Users\\96650\\Documents\\Programming\\Python1\\Mp3 Player\\images\\play_button.png"""
+play_b = pygame.image.load(directorty)
 play_b = pygame.transform.scale(play_b, (64, 64))
 
 
@@ -195,22 +193,15 @@ while running:
         p.listing("Exit")
         p.listing("Pause")
 
-
     screen.fill(white)
     p.draw_button(xb=300, yb=100, radius=50, txt="Play",
-                 colorb=lightblue)
-
+                  colorb=lightblue)
     p.draw_button(xb=450, yb=100, radius=50, txt="Pause",
-                 colorb=lightblue)
-
+                  colorb=lightblue)
     p.draw_button(xb=300, yb=250, radius=50, txt="Exit",
-                 colorb=lightblue)
-
+                  colorb=lightblue)
     p.draw_button(xb=450, yb=250, radius=50, txt="Next",
-                 colorb=lightblue)
-
-
-
+                  colorb=lightblue)
 
     p.text(screen_width - 500, screen_height - 50, black,
            "'P' for PLAY   'SPACE' for PAUSE   'E' for EXIT   'N' for NEXT.")
