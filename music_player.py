@@ -2,11 +2,10 @@ import pygame
 import sys
 import glob
 import os
-import time
 
 pygame.init()
 clock = pygame.time.Clock()
-fps = 20
+fps = 60
 
 screen_height = 400
 screen_width = 600
@@ -19,17 +18,18 @@ maroon = (128, 0, 0)
 pink = (244, 52, 131)
 lightblue = (27, 238, 255)
 grey = (129, 137, 129)
-brown = (160,82,45)
+brown = (160, 82, 45)
 
 screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption("MP3 Player")
 print(f"CURRENT DIR: {os.getcwd()}")
 
 
-
 script_dir = os.path.dirname(__file__)
 rel_path = "Music"
 abs_file_path = os.path.join(script_dir, rel_path)
+
+
 def go_into_Music():
     os.chdir(abs_file_path)
 
@@ -45,8 +45,6 @@ class Music_Player(object):
         pygame.mixer.music.load(self.file_name)
         pygame.mixer.music.play(0)
 
-    def color_screen(self, color):
-        self.display.fill(color)
 
     @classmethod
     def inc_index(cls):
@@ -57,11 +55,10 @@ class Music_Player(object):
             Music_Player.index += 1
         print(Music_Player.index)
 
-
     @classmethod
     def find_mp3_files(cls):
         songs = glob.glob("./*.mp3")
-        music_list = [song[2:] for song in songs] # Comprehensive list
+        music_list = [song[2:] for song in songs]  # Comprehensive list
         return music_list
 
     @classmethod
@@ -69,7 +66,6 @@ class Music_Player(object):
         songs = Music_Player().find_mp3_files()
         length = len(songs)
         return length
-
 
     @classmethod
     def play_music(cls):
@@ -86,11 +82,10 @@ class Music_Player(object):
             pygame.mixer.music.pause()
             print("Paused...")
             Music_Player.is_playing = False
-        elif not  Music_Player.is_playing:
+        elif not Music_Player.is_playing:
             pygame.mixer.music.unpause()
             print("Unpaused...")
             Music_Player.is_playing = True
-
 
     @classmethod
     def next_music(cls):
@@ -100,7 +95,6 @@ class Music_Player(object):
         pygame.mixer.music.play(-1)
         print(f"Playing {songs[Music_Player.index]}")
 
-
     def current_song(self, x, y, color):
         go_into_Music()
         all_songs = Music_Player().find_mp3_files()
@@ -109,38 +103,30 @@ class Music_Player(object):
         on_screen = f"{Music_Player.index + 1} : {playing_now}"
         font = pygame.font.Font(None, 25)
         text = font.render(str(on_screen), 1, color)
-        self.display.blit(text, (x,y))
-
+        self.display.blit(text, (x, y))
 
     def text(self, x, y, color, on_screen):
         font = pygame.font.Font(None, 20)
         text = font.render(str(on_screen), 1, color)
-        self.display.blit(text, (x,y))
-
+        self.display.blit(text, (x, y))
 
     def get_music_sec(self):
-        milli  = pygame.mixer.music.get_pos()
+        milli = pygame.mixer.music.get_pos()
         seconds = milli / 1000
         seconds = int(seconds)
         on_screen = seconds
         font = pygame.font.Font(None, 30)
-        text = font.render(str(on_screen), 1, black)
+        text = font.render(str(on_screen), 1, red)
         self.display.blit(text, (100,  200))
 
+    def draw_button(self, xb, yb, radius, txt, colorb):
 
-
-
-
-
-    def button(self, xb, yb, radius, txt, colorb):
-        go_into_Music()
-        # Drawing the rectangle (button)
         pygame.draw.circle(self.display, colorb, (xb, yb), radius)
-        # Writing in the button
 
+    def listing(self, txt):
+        go_into_Music()
         # Making the button functional
         xm, ym = pygame.mouse.get_pos()
-
 
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_p:
@@ -156,7 +142,6 @@ class Music_Player(object):
             if event.key == pygame.K_SPACE:
                 print("Paused...")
                 Music_Player.pause_music()
-
 
         if event.type == pygame.MOUSEBUTTONDOWN:
 
@@ -181,15 +166,19 @@ class Music_Player(object):
                     Music_Player.next_music()
 
 
-play_b = pygame.image.load("C:\\Users\\96650\\Documents\\Programming\\Python1\\Mp3 Player\\images\\play_button.png")
+play_b = pygame.image.load(
+    "C:\\Users\\96650\\Documents\\Programming\\Python1\\Mp3 Player\\images\\play_button.png")
 play_b = pygame.transform.scale(play_b, (64, 64))
+
 
 def pause_logo(x1, y1, x2, y2):
     pygame.draw.line(screen, black, (x1, y1), (x2, y2))
     pygame.draw.line(screen, black, (x1 - 25, y1), (x2 - 25, y2))
 
+
 def next_logo(x1, y1):
-    pygame.draw.polygon(screen, (0, 0, 0), [(x1, y1), (x1, y1 + 50), (x1 + 25, y1 + 25)])
+    pygame.draw.polygon(screen, (0, 0, 0), [
+                        (x1, y1), (x1, y1 + 50), (x1 + 25, y1 + 25)])
 
 
 p = Music_Player()
@@ -201,27 +190,33 @@ while running:
             running = False
             pygame.quit()
             sys.exit()
+        p.listing("Play")
+        p.listing("Next")
+        p.listing("Exit")
+        p.listing("Pause")
 
-        p.color_screen(white)
 
-        p.button(xb=300, yb=100, radius=50, txt="Play",
-                colorb=lightblue)
-
-        p.button(xb=450, yb=100, radius=50, txt="Pause",
+    screen.fill(white)
+    p.draw_button(xb=300, yb=100, radius=50, txt="Play",
                  colorb=lightblue)
 
-        p.button(xb=300, yb=250, radius=50, txt="Exit",
+    p.draw_button(xb=450, yb=100, radius=50, txt="Pause",
                  colorb=lightblue)
 
-        p.button(xb=450, yb=250, radius=50, txt="Next",
+    p.draw_button(xb=300, yb=250, radius=50, txt="Exit",
                  colorb=lightblue)
+
+    p.draw_button(xb=450, yb=250, radius=50, txt="Next",
+                 colorb=lightblue)
+
+
 
 
     p.text(screen_width - 500, screen_height - 50, black,
-            "'P' for PLAY   'SPACE' for PAUSE   'E' for EXIT   'N' for NEXT.")
+           "'P' for PLAY   'SPACE' for PAUSE   'E' for EXIT   'N' for NEXT.")
 
-    p.text(10, 20, black, f'number of mp3 files : {Music_Player.get_num_mp3()}')
-
+    p.text(10, 20, black,
+           f'number of mp3 files : {Music_Player.get_num_mp3()}')
 
     p.text(20, 125, pink, "Currently playing:")
     p.current_song(20, 170, pink)
@@ -233,8 +228,6 @@ while running:
     p.text(280, 240, black,  "EXIT")
 
     p.get_music_sec()
-
-
 
     clock.tick(fps)
     pygame.display.update()
