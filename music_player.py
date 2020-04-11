@@ -38,7 +38,6 @@ class Music_Player(object):
     index = 0
     is_playing = True
 
-
     def __init__(self):
         self.display = screen
 
@@ -79,6 +78,7 @@ class Music_Player(object):
         pygame.mixer.music.load(songs[0])
         pygame.mixer.music.play(-1)
         print(f"Playing {songs[0]}")
+        Music_Player.index = 0
 
     @classmethod
     def pause_music(cls):
