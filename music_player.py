@@ -1,7 +1,8 @@
 import pygame
 import sys
-import glob
+import g
 import time
+import os
 
 pygame.init()
 clock = pygame.time.Clock()
@@ -22,8 +23,15 @@ brown = (160,82,45)
 
 screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption("MP3 Player")
+print(f"CURRENT DIR: {os.getcwd()}")
 
 
+
+script_dir = os.path.dirname(__file__)
+rel_path = "Music"
+abs_file_path = os.path.join(script_dir, rel_path)
+def go_into_Music():
+    os.chdir(abs_file_path)
 
 
 class Music_Player(object):
@@ -93,6 +101,7 @@ class Music_Player(object):
 
 
     def current_song(self, x, y, color):
+        go_into_Music()
         all_songs = Music_Player().find_mp3_files()
         playing_now = all_songs[Music_Player.index]
         playing_now = playing_now[:-4]
@@ -112,6 +121,7 @@ class Music_Player(object):
 
 
     def button(self, xb, yb, radius, txt, colorb):
+        go_into_Music()
         # Drawing the rectangle (button)
         pygame.draw.circle(self.display, colorb, (xb, yb), radius)
         # Writing in the button
