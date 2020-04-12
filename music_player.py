@@ -52,7 +52,6 @@ class Music_Player(object):
         if Music_Player.index != 0:
             Music_Player.index -= 1
 
-
     @classmethod
     def find_mp3_files(cls):
         songs = glob.glob("./*.mp3")
@@ -134,12 +133,13 @@ class Music_Player(object):
                 Music_Player.play_music()
             if (event.key == pygame.K_e) and (txt == "Previous"):
                 print("Going back...")
+                Music_Player.go_back()
             if (event.key == pygame.K_n) and (txt == "Next"):
                 print("Next button is clicked")
                 Music_Player.next_music()
             if (event.key == pygame.K_SPACE) and (txt == "Pause"):
                 Music_Player.pause_music()
-            Music_Player.set_index()
+            # Music_Player.set_index()
 
         xm, ym = pygame.mouse.get_pos()
         if event.type == pygame.MOUSEBUTTONDOWN:
@@ -156,6 +156,7 @@ class Music_Player(object):
             if txt == "Previous":
                 if (250 <= xm <= 350) and (200 <= ym <= 300):
                     print("Going back...")
+                    Music_Player.go_back()
 
 
             if txt == "Next":
