@@ -48,6 +48,12 @@ class Music_Player(object):
         print(Music_Player.index)
 
     @classmethod
+    def dec_index(cls):
+        if Music_Player.index != 0:
+            Music_Player.index -= 1
+
+
+    @classmethod
     def find_mp3_files(cls):
         songs = glob.glob("./*.mp3")
         music_list = [song[2:] for song in songs]  # Comprehensive list
@@ -87,6 +93,14 @@ class Music_Player(object):
         pygame.mixer.music.play(-1)
         print(f"Playing {songs[Music_Player.index]}")
 
+    @classmethod
+    def go_back(cls):
+        songs = Music_Player.find_mp3_files()
+        Music_Player.dec_index()
+        pygame.mixer.music.load(songs[Music_Player.index])
+        pygame.mixer.music.play(-1)
+        print(f"Playing {songs[Music_Player.index]}")
+
     def current_song(self, x, y, color):
         all_songs = Music_Player.find_mp3_files()
         playing_now = all_songs[Music_Player.index]
@@ -118,15 +132,14 @@ class Music_Player(object):
         if event.type == pygame.KEYDOWN:
             if (event.key == pygame.K_p) and (txt == "Play"):
                 Music_Player.play_music()
-            if (event.key == pygame.K_e) and (txt == "Exit"):
-                print("Exit button is clicked")
-                pygame.quit()
-                sys.exit()
+            if (event.key == pygame.K_e) and (txt == "Previous"):
+                print("Going back...")
             if (event.key == pygame.K_n) and (txt == "Next"):
                 print("Next button is clicked")
                 Music_Player.next_music()
             if (event.key == pygame.K_SPACE) and (txt == "Pause"):
                 Music_Player.pause_music()
+            Music_Player.set_index()
 
         xm, ym = pygame.mouse.get_pos()
         if event.type == pygame.MOUSEBUTTONDOWN:
@@ -140,11 +153,10 @@ class Music_Player(object):
                 if (398 <= xm <= 500) and (50 <= ym <= 145):
                     Music_Player.pause_music()
 
-            if txt == "Exit":
+            if txt == "Previous":
                 if (250 <= xm <= 350) and (200 <= ym <= 300):
-                    print("Exiting...")
-                    pygame.quit()
-                    sys.exit()
+                    print("Going back...")
+
 
             if txt == "Next":
                 if (400 <= xm <= 500) and (200 <= ym <= 300):
@@ -178,7 +190,7 @@ while running:
             sys.exit()
         p.listening("Play")
         p.listening("Next")
-        p.listening("Exit")
+        p.listening("Previous")
         p.listening("Pause")
 
     screen.fill(white)
@@ -191,8 +203,7 @@ while running:
     p.draw_button(x=450, y=250, radius=50,
                   color=lightblue)
 
-    p.text(screen_width - 500, screen_height - 50, black,
-           "'P' for PLAY   'SPACE' for PAUSE   'E' for EXIT   'N' for NEXT.")
+    p.text(screen_width - 500, screen_height - 50, black, "'P' for PLAY   'SPACE' for PAUSE   'E' for Previous   'N' for NEXT.")
 
     p.text(10, 20, black,
            f'number of mp3 files : {Music_Player.get_num_mp3()}')
@@ -204,7 +215,7 @@ while running:
 
     pause_logo(460, 70, 460, 120)
     next_logo(440, 220)
-    p.text(280, 240, black,  "EXIT")
+    p.text(280, 240, black,  "Previous")
 
     p.get_music_sec()
 
